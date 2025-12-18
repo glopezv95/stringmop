@@ -27,9 +27,9 @@ dev = [
   "pytest"
 ]
 
-# [project.urls]
-# Homepage = "https://github.com/pypa/sampleproject"
-# Issues = "https://github.com/pypa/sampleproject/issues"
+[project.urls]
+Homepage = "https://github.com/glopezv95/stringmop"
+Issues = "https://github.com/glopezv95/stringmop/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
