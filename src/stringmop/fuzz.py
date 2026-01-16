@@ -25,6 +25,9 @@ def _extract_one(
     score_cutoff : float
         Minimum similarity score (0.0-100.0) required to consider a match valid.
         Default is 90.0.
+    process_only_alphanumeric : bool
+        Wether to process non-alphanumeric characters when normalizing the values in both strs_src and strs_repl or not.
+        Default is False.
 
     Returns
     -------
@@ -82,6 +85,9 @@ def fuzz_replace(
     score_cutoff : float, optional
         Minimum similarity score (0.0-100.0) required to consider a match valid.
         Default is 90.0.
+    process_only_alphanumeric : bool
+        Wether to process non-alphanumeric characters when normalizing the values in both strs_src and strs_repl or not.
+        Default is False.
 
     Returns
     -------

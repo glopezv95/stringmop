@@ -4,7 +4,8 @@ import re
 def normalize(
         str_src: str,
         to_uppercase: bool = False,
-        keep_only_alphanumeric: bool = False
+        keep_only_alphanumeric: bool = False,
+        sort: bool = False
         ) -> str:
     """
     Converts an input string to uppercase or lowercase, strips whitespace characters, 
@@ -21,7 +22,7 @@ def normalize(
         If True, all whitespace sequences are replaced with a single space " ". 
         Default is True.
     keep_only_alphanumeric : bool, optional
-        If True, all non-alphanumeric characters except whitespaces are removed. 
+        If True, all non-alphanumeric characters are removed.
         Default is False.
 
     Returns
@@ -40,7 +41,7 @@ def normalize(
     str_dst = unidecode(str_src)
     str_dst = str_dst.upper() if to_uppercase else str_dst.lower()
     if keep_only_alphanumeric:
-        str_dst = re.sub(r'[^a-zA-Z0-9\s]', '', str_dst)
+        str_dst = re.sub(r'[^a-zA-Z0-9]', ' ', str_dst)
     str_dst = (re.sub(r'\s+', ' ', str_dst.strip()))
 
     return str_dst
