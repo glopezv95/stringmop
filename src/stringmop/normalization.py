@@ -4,7 +4,6 @@ import re
 def normalize(
         str_src: str,
         to_uppercase: bool = False,
-        repl_whitespace: bool = True,
         keep_only_alphanumeric: bool = False
         ) -> str:
     """
@@ -40,12 +39,8 @@ def normalize(
     """
     str_dst = unidecode(str_src)
     str_dst = str_dst.upper() if to_uppercase else str_dst.lower()
-    str_dst = (
-        re.sub(r'\s+', ' ', str_dst.strip())
-        if repl_whitespace
-        else str_dst.strip()
-    )
     if keep_only_alphanumeric:
         str_dst = re.sub(r'[^a-zA-Z0-9\s]', '', str_dst)
+    str_dst = (re.sub(r'\s+', ' ', str_dst.strip()))
 
     return str_dst
