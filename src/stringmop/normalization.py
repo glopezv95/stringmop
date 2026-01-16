@@ -21,6 +21,9 @@ def normalize(
     repl_whitespace : bool, optional
         If True, all whitespace sequences are replaced with a single space " ". 
         Default is True.
+    keep_only_alphanumeric : bool, optional
+        If True, all non-alphanumeric characters except whitespaces are removed. 
+        Default is False.
 
     Returns
     -------
@@ -43,6 +46,6 @@ def normalize(
         else str_dst.strip()
     )
     if keep_only_alphanumeric:
-        str_dst = re.sub(r'[^a-zA-Z0-9 ]', '', str_dst)
+        str_dst = re.sub(r'[^a-zA-Z0-9\s]', '', str_dst)
 
     return str_dst
