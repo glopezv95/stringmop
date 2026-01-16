@@ -6,7 +6,10 @@ class TestExtractOne:
     score_cutoff = 90.0
 
     def test_empty(self) -> None:
-        assert _extract_one(str_src='', strs_repl=[], score_cutoff=self.score_cutoff) == (None, 0, -1)
+        assert _extract_one(
+            str_src='', strs_repl=[],
+            score_cutoff=self.score_cutoff
+            ) == (None, 0, -1)
 
     def test_generic_correct(self) -> None:
         str_src = 'Jamón Serpano'
@@ -18,23 +21,44 @@ class TestExtractOne:
     def test_generic_incorrect(self) -> None:
         str_src = 'Jamón Serpano'
         strs_repl = ['Fish and Chips', 'Papas Arrugás']
-        result, _, _ = _extract_one(str_src=str_src, strs_repl=strs_repl, score_cutoff=self.score_cutoff)
+        result, _, _ = _extract_one(
+            str_src=str_src, strs_repl=strs_repl,
+            score_cutoff=self.score_cutoff
+        )
 
         assert result is None
 
     def test_processor(self) -> None:
         str_src = 'Jamón Serrano'
         strs_repl = ['Jamon Serrana', 'jamon serrano']
-        result, _, _ = _extract_one(str_src=str_src, strs_repl=strs_repl, score_cutoff=self.score_cutoff)
+        result, _, _ = _extract_one(
+            str_src=str_src, strs_repl=strs_repl,
+            score_cutoff=self.score_cutoff
+        )
 
         assert result == 'jamon serrano'
 
     def test_cutoff(self) -> None:
         str_src = 'Jamón Serpano'
         strs_repl = ['Fish and Chips', 'Papas Arrugás']
-        result, _, _ = _extract_one(str_src=str_src, strs_repl=strs_repl, score_cutoff=10.0)
+        result, _, _ = _extract_one(
+            str_src=str_src, strs_repl=strs_repl,
+            score_cutoff=10.0
+        )
 
         assert result == 'Papas Arrugás'
+
+    def test_process_only_alphanumeric(self) -> None:
+        str_src = 'Jamón Serpano'
+        strs_repl = ['jamo \nserrano', 'jamon_\nserrano']
+        result, _, _ = _extract_one(
+            str_src=str_src, strs_repl=strs_repl,
+            process_only_alphanumeric=True,
+            score_cutoff=self.score_cutoff
+        )
+
+        assert result == ('jamon_\nserrano')
+        
 
 class TestBuildExtraction:
 

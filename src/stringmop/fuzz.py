@@ -1,6 +1,7 @@
 from rapidfuzz.process import extractOne
 from collections.abc import Sequence
 from typing import Optional
+from functools import partial
 
 from stringmop.normalization import normalize
 from stringmop.types import FuzzExtraction, FuzzExtractions
@@ -8,7 +9,8 @@ from stringmop.types import FuzzExtraction, FuzzExtractions
 def _extract_one(
         str_src: str,
         strs_repl: Sequence[str],
-        score_cutoff: float
+        score_cutoff: float,
+        process_only_alphanumeric: bool = False
         ) -> tuple[Optional[str], float, int]:
     """
     Apply rapidfuzz.process.extractOne fuzzy to a string to replace it with the closest match
@@ -29,9 +31,19 @@ def _extract_one(
     tuple[Optional[str], float, int]
         Tuple containing the replacement string, the similarity score, and the index of the replacement.
     """
-    return extractOne(str_src, strs_repl, processor=normalize, score_cutoff=score_cutoff) or (None, 0, -1)
+    return extractOne(
+        str_src, strs_repl,
+        processor=partial(
+            normalize,
+            keep_only_alphanumeric=process_only_alphanumeric
+        ),
+        score_cutoff=score_cutoff
+    ) or (None, 0, -1)
 
-def _build_fuzz_extraction(str_src: str, extraction: tuple[Optional[str], float, int]) -> FuzzExtraction:
+def _build_fuzz_extraction(
+        str_src: str,
+        extraction: tuple[Optional[str], float, int]
+        ) -> FuzzExtraction:
     """
     Convert a rapidfuzz.process.extractOne extraction to a stringmop.types.FuzzExtraction object.
 
@@ -54,7 +66,8 @@ def _build_fuzz_extraction(str_src: str, extraction: tuple[Optional[str], float,
 def fuzz_replace(
         strs_src: Sequence[str],
         strs_repl: Sequence[str],
-        score_cutoff: float = 90.0
+        score_cutoff: float = 90.0,
+        process_only_alphanumeric: bool = False
         ) -> FuzzExtractions:
     """
     Perform fuzzy string matching to replace source strings with the closest matches 
@@ -87,7 +100,11 @@ def fuzz_replace(
     )
     """
     rapidfuzz_extractions = [
-        _extract_one(str_src=str_src, strs_repl=strs_repl, score_cutoff=score_cutoff)
+        _extract_one(
+            str_src=str_src, strs_repl=strs_repl,
+            score_cutoff=score_cutoff,
+            process_only_alphanumeric=process_only_alphanumeric
+        )
         for str_src in strs_src
     ]
     extractions = [
