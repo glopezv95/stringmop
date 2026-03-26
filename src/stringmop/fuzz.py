@@ -6,7 +6,7 @@ from functools import partial
 from stringmop.normalization import normalize
 from stringmop.types import FuzzExtraction, FuzzExtractions
 
-def _extract_one(
+def extract_one(
         str_src: str,
         strs_repl: Sequence[str],
         score_cutoff: float,
@@ -106,7 +106,7 @@ def fuzz_replace(
     )
     """
     rapidfuzz_extractions = [
-        _extract_one(
+        extract_one(
             str_src=str_src, strs_repl=strs_repl,
             score_cutoff=score_cutoff,
             process_only_alphanumeric=process_only_alphanumeric
